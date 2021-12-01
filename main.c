@@ -5,11 +5,49 @@
 #include <wchar.h>
 #include <wctype.h>
 #include <stdlib.h>
+#include <string.h>
 #include "error.h"
 #include "stdbool.h"
 
-#define program_name\
-  _("tagCloud\n")
+
+#define Num_MAX 10
+#define Caracter_MAX 64
+
+char** read_from_file (char* nomeArquivo, int *index)
+{ 
+    char **palavras = malloc (Num_MAX * sizeof *palavras);
+    char buf[Caracter_MAX] = {0};
+    FILE* arq = fopen (nomeArquivo, "r");
+
+    if (arq == NULL){
+        fprintf (stderr, "Can't open file\n");
+        exit(1);
+    }
+    *index = 0;
+    while (fgets (buf, Caracter_MAX, arq))
+    {
+        char *p = buf;
+        size_t len = strlen (p);
+        while (len && (p[len-1] == '\r' || p[len-1] == '\n'))
+            p[--len] = 0;
+
+//        O que o strdup Realiza:
+//        char *strdup(const char *src) {
+//        char *dst = malloc(strlen (src) + 1);  // Space for length plus nul
+//        if (dst == NULL) return NULL;          // No memory
+//        strcpy(dst, src);                      // Copy the characters
+//        return dst;                            // Return the new string
+        palavras[(*index)++] = strdup (buf);
+
+        if (*index == Num_MAX) {
+            fprintf (stderr, "warning: N_MAX words read.\n");
+            break;
+        }
+    }
+    fclose(arq);
+
+    return palavras;
+}
 
   #define FATAL_ERROR(Message)						\
   do									\
@@ -78,13 +116,12 @@ main (int argc, char *argv[])
   char Linha[100];
   char* palavras[20000];
   bool isCsv;
-  int numPalavras = 0;
   int i = 0;
   int optc;
   int sizeWord;
+  int numPalavras;
   size_t nfiles;
-  char **files;
-  char *files_from = NULL;
+  char* nomeArquivo;
   FILE *arq;
   struct fstatus *fstatus;
 
@@ -146,35 +183,30 @@ main (int argc, char *argv[])
         usage (1);
     }
 
+
     if (isCsv == true)
     {   
-        arq = fopen(argv[2], "rt");
-        if (arq == NULL)
-        return EXIT_FAILURE;
-        while(fgets(Linha, sizeof Linha, arq) != NULL)
-    {
-        palavras[i] = strdup(Linha);
+        nomeArquivo = argv[2];
+        char **words =  read_from_file(nomeArquivo, &numPalavras);
 
-//         char *strdup(const char *src) {
-//         char *dst = malloc(strlen (src) + 1);  // Space for length plus nul
-//         if (dst == NULL) return NULL;          // No memory
-//         strcpy(dst, src);                      // Copy the characters
-//         return dst;                            // Return the new string
-// }
+        printf("%s ", words[2]);
+        printf("%i ", numPalavras);
 
-        i++;
 
-        numPalavras++;
-    }
+        int j = 0;
 
-    int j = 0;
+        for (j = 0; j < numPalavras; j++){
+            printf("\n%s", words[j]); //Exibi as palavras que estao no vetor.
+            printf("%i",j);
+        }
 
-    for (j = 0; j < numPalavras; j++)
-        printf("\n%s", palavras[j]); //Exibi as palavras que estao no vetor.
+        for (i = 0; i < numPalavras; i++)
+        free (words[i]);
+        free (words);
 
-    printf("\n\n");
+        int k = strlen(palavras[0]);
+        printf("\n %d", k);
 
-    fclose(arq);    
-    }
-    
+        printf("\n\n");
+    }  
 }
