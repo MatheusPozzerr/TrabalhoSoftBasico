@@ -10,7 +10,7 @@
 #include "stdbool.h"
 
 
-#define Num_MAX 10
+#define Num_MAX 500
 #define Caracter_MAX 64
 
 char** read_from_file (char* nomeArquivo, int *index)
@@ -189,23 +189,15 @@ main (int argc, char *argv[])
         nomeArquivo = argv[2];
         char **words =  read_from_file(nomeArquivo, &numPalavras);
 
-        printf("%s ", words[2]);
-        printf("%i ", numPalavras);
-
-
         int j = 0;
 
         for (j = 0; j < numPalavras; j++){
-            printf("\n%s", words[j]); //Exibi as palavras que estao no vetor.
-            printf("%i",j);
+            printf("\n%s", words[j]); 
         }
 
         for (i = 0; i < numPalavras; i++)
         free (words[i]);
         free (words);
-
-        int k = strlen(palavras[0]);
-        printf("\n %d", k);
 
         printf("\n\n");
     }  
