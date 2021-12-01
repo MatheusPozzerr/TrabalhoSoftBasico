@@ -39,32 +39,21 @@ usage (int status)
   else
     {
       printf ("\
-Usage: tagCloud [OPTION]... [FILE]...\n\
-  or:  tagCloud [OPTION]... --files0-from=F\n\
+Uso: tagCloud [OPTION]... [FILE]...\n\
+Ou:  tagCloud [OPTION]... --files0-from=F\n\
 ");
       printf ("\
-Print newline, word, and byte counts for each FILE, and a total line if\n\
-more than one FILE is specified.  A word is a non-zero-length sequence of\n\
-printable characters delimited by white space.\n\
+O programa tem como objetivo emitir as palavras mais utilizadas, podendo ser realizada saídas em formato texto e gráfico\n\
 ");
 
       printf ("\
 \n\
-The options below may be used to select which counts are printed, always in\n\
-the following order: newline, word, character, byte, maximum line length.\n\
-  -c, --bytes            print the byte counts\n\
-  -m, --chars            print the character counts\n\
-  -l, --lines            print the newline counts\n\
+As opções possíveis estão descritas abaixo:\n\
+-c                     Saída com as palavras mais utilizadas em formato csv\n\
+-h                     Saída com as palavras mais utilizadas em formato HTML\n\
 ");
-      printf ("\
-      --files0-from=F    read input from the files specified by\n\
-                           NUL-terminated names in file F;\n\
-                           If F is - then read names from standard input\n\
-  -L, --max-line-length  print the maximum display width\n\
-  -w, --words            print the word counts\n\
-");
-      printf ("--help     mostra esta ajuda e sai, \n");
-      printf ("--version  informa a versão e sai.");
+      printf ("--help                 mostra esta ajuda e sai, \n");
+      printf ("--version              informa a versão e sai.\n");
     }
   exit (status);
 }
@@ -76,7 +65,7 @@ version (int status)
     printf("Tente tagCloud --help para mais informações.");
   else
     {
-      printf ("Versão 1.0 \n Este é um software livre: você é livre para alterá-lo e redistribuí-lo. NÃO HÁ QUALQUER GARANTIA, na máxima extensão permitida em lei.\n Escrito por Matheus Pozzer Moraes, Diogo Almeida e Douglas Sobreira.");
+      printf ("Versão 1.0 \nEste é um software livre: você é livre para alterá-lo e redistribuí-lo. NÃO HÁ QUALQUER GARANTIA, na máxima extensão permitida em lei.\nEscrito por Matheus Pozzer Moraes, Diogo Almeida e Douglas Sobreira.\n");
     }
   exit (status);
 }
@@ -90,6 +79,7 @@ main (int argc, char *argv[])
   size_t nfiles;
   char **files;
   char *files_from = NULL;
+  FILE *arq;
   struct fstatus *fstatus;
 
   /* Line buffer stdout to ensure lines are written atomically and immediately
@@ -100,7 +90,6 @@ main (int argc, char *argv[])
   ret = strcmp(argv[1] , "--help");
   if (argc > 1){
        if (argc <= 2){
-           printf("Palavra %s", argv[1]);
             if (strcmp(argv[1] , "--help") == 0)
             {
                 optc = 0;
@@ -111,8 +100,6 @@ main (int argc, char *argv[])
        }
   }
     
-    printf("TESTEEE\n %s", argv[1]);
-    printf("TESTEEE %d\n", optc);
 
     switch (optc)
     {
