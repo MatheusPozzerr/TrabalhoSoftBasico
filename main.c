@@ -19,6 +19,7 @@
     }									\
   while (0)
 
+void * malloc (size_t size);
 
 enum operating_mode
   {
@@ -74,6 +75,11 @@ int
 main (int argc, char *argv[])
 {
   bool ok;
+  char Linha[100];
+  char* palavras[20000];
+  bool isCsv;
+  int numPalavras = 0;
+  int i = 0;
   int optc;
   int sizeWord;
   size_t nfiles;
@@ -89,15 +95,18 @@ main (int argc, char *argv[])
   int ret;
   ret = strcmp(argv[1] , "--help");
   if (argc > 1){
-       if (argc <= 2){
             if (strcmp(argv[1] , "--help") == 0)
             {
                 optc = 0;
             }
             if (strcmp(argv[1] , "--version") == 0){
                 optc = 1;
-            }  
-       }
+            }
+            if (argc >= 2){          
+            if (strcmp(argv[1] , "-c") == 0){
+                optc = 2;
+            }   
+        }       
   }
     
 
@@ -130,7 +139,42 @@ main (int argc, char *argv[])
       case 1: version(0);
       break;
 
+      case 2: isCsv = true;
+      break; 
+
       default:
         usage (1);
     }
+
+    if (isCsv == true)
+    {   
+        arq = fopen(argv[2], "rt");
+        if (arq == NULL)
+        return EXIT_FAILURE;
+        while(fgets(Linha, sizeof Linha, arq) != NULL)
+    {
+        palavras[i] = strdup(Linha);
+
+//         char *strdup(const char *src) {
+//         char *dst = malloc(strlen (src) + 1);  // Space for length plus nul
+//         if (dst == NULL) return NULL;          // No memory
+//         strcpy(dst, src);                      // Copy the characters
+//         return dst;                            // Return the new string
+// }
+
+        i++;
+
+        numPalavras++;
+    }
+
+    int j = 0;
+
+    for (j = 0; j < numPalavras; j++)
+        printf("\n%s", palavras[j]); //Exibi as palavras que estao no vetor.
+
+    printf("\n\n");
+
+    fclose(arq);    
+    }
+    
 }
