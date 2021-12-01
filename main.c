@@ -13,42 +13,6 @@
 #define Num_MAX 500
 #define Caracter_MAX 64
 
-char** read_from_file (char* nomeArquivo, int *index)
-{ 
-    char **palavras = malloc (Num_MAX * sizeof *palavras);
-    char buf[Caracter_MAX] = {0};
-    FILE* arq = fopen (nomeArquivo, "r");
-
-    if (arq == NULL){
-        fprintf (stderr, "Can't open file\n");
-        exit(1);
-    }
-    *index = 0;
-    while (fgets (buf, Caracter_MAX, arq))
-    {
-        char *p = buf;
-        size_t len = strlen (p);
-        while (len && (p[len-1] == '\r' || p[len-1] == '\n'))
-            p[--len] = 0;
-
-//        O que o strdup Realiza:
-//        char *strdup(const char *src) {
-//        char *dst = malloc(strlen (src) + 1);  // Space for length plus nul
-//        if (dst == NULL) return NULL;          // No memory
-//        strcpy(dst, src);                      // Copy the characters
-//        return dst;                            // Return the new string
-        palavras[(*index)++] = strdup (buf);
-
-        if (*index == Num_MAX) {
-            fprintf (stderr, "warning: N_MAX words read.\n");
-            break;
-        }
-    }
-    fclose(arq);
-
-    return palavras;
-}
-
   #define FATAL_ERROR(Message)						\
   do									\
     {									\
@@ -109,6 +73,61 @@ version (int status)
   exit (status);
 }
 
+
+char** read_from_file (char* nomeArquivo, int *index)
+{ 
+    char **palavras = malloc (Num_MAX * sizeof *palavras);
+    char buf[Caracter_MAX] = {0};
+    FILE* arq = fopen (nomeArquivo, "r");
+
+    if (arq == NULL){
+        fprintf (stderr, "Can't open file\n");
+        exit(1);
+    }
+    *index = 0;
+
+    while (fgets (buf, Caracter_MAX, arq))
+    {
+        char *p = buf;
+        size_t len = strlen (p);
+        while (len && (p[len-1] == '\r' || p[len-1] == '\n'))
+            p[--len] = 0;
+
+//        O que o strdup Realiza:
+//        char *strdup(const char *src) {
+//        char *dst = malloc(strlen (src) + 1);  // Space for length plus nul
+//        if (dst == NULL) return NULL;          // No memory
+//        strcpy(dst, src);                      // Copy the characters
+//        return dst;                            // Return the new string
+        palavras[(*index)++] = strdup (buf);
+
+        if (*index == Num_MAX) {
+            fprintf (stderr, "warning: N_MAX words read.\n");
+            break;
+        }
+    }
+    fclose(arq);
+
+    return palavras;
+}
+
+void analisaTexto (char** palavras, int numFrases)
+{
+    int j = 0;
+    char * pch;
+    // vector< pair<string, int> > list;
+
+        for (j = 0; j < numFrases; j++){
+            pch = strtok (palavras[j]," ,.-");
+            while (pch != NULL)
+            {
+            printf ("%s\n",pch);
+            pch = strtok (NULL, " ,.-");
+            }
+        }
+}
+
+
 int
 main (int argc, char *argv[])
 {
@@ -116,6 +135,7 @@ main (int argc, char *argv[])
   char Linha[100];
   char* palavras[20000];
   bool isCsv;
+  bool isHtml;
   int i = 0;
   int optc;
   int sizeWord;
@@ -142,7 +162,10 @@ main (int argc, char *argv[])
             if (argc >= 2){          
             if (strcmp(argv[1] , "-c") == 0){
                 optc = 2;
-            }   
+            }
+            if (strcmp(argv[1] , "-h") == 0){
+                optc = 3;
+            }      
         }       
   }
     
@@ -177,28 +200,39 @@ main (int argc, char *argv[])
       break;
 
       case 2: isCsv = true;
+      break;
+
+      case 3: isHtml = true;
       break; 
 
       default:
         usage (1);
     }
 
-
     if (isCsv == true)
     {   
         nomeArquivo = argv[2];
         char **words =  read_from_file(nomeArquivo, &numPalavras);
 
-        int j = 0;
-
-        for (j = 0; j < numPalavras; j++){
-            printf("\n%s", words[j]); 
-        }
+        analisaTexto(words, numPalavras);
 
         for (i = 0; i < numPalavras; i++)
         free (words[i]);
         free (words);
 
         printf("\n\n");
-    }  
+    }
+    if (isHtml == true)
+    {   
+        nomeArquivo = argv[2];
+        char **words =  read_from_file(nomeArquivo, &numPalavras);
+
+        analisaTexto(words, numPalavras);
+
+        for (i = 0; i < numPalavras; i++)
+        free (words[i]);
+        free (words);
+
+        printf("\n\n");
+    }   
 }
