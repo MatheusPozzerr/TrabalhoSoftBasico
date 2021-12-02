@@ -178,6 +178,68 @@ void imprimeCsv (int contador)
     fclose(arqCsv);
 }
 
+void imprimeHtmlComCor(int contador){
+    FILE* arqHTML = fopen ("PalavrasUtilizadas.html", "w");
+    if (contador < 40)
+    {
+        /* code */
+    }
+    else{
+        fprintf(arqHTML, "<html> \n");
+        fprintf(arqHTML, "<title> Palavras e Recorrencias </title> \n");
+        fprintf(arqHTML, "<link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\">\n");
+        fprintf(arqHTML, "</head>\n");
+        fprintf(arqHTML, "<body> \n");
+        fprintf(arqHTML, "<div class=\"words\"> \n");
+        fprintf(arqHTML, "<span class=\"text1\">%s</span> \n", palavrasTexto[15].palavra);
+        fprintf(arqHTML, "<span class=\"text2\">%s</span> \n", palavrasTexto[12].palavra);
+        fprintf(arqHTML, "<span class=\"text1\">%s</span> \n", palavrasTexto[16].palavra);
+        fprintf(arqHTML, "<span class=\"text1\">%s</span> \n", palavrasTexto[17].palavra);
+        fprintf(arqHTML, "<span class=\"text5\">%s</span> \n", palavrasTexto[0].palavra);
+        fprintf(arqHTML, "<span class=\"text1\">%s</span> \n", palavrasTexto[18].palavra);
+        fprintf(arqHTML, "<span class=\"text1\">%s</span> \n", palavrasTexto[19].palavra);
+        fprintf(arqHTML, "<span class=\"text1\">%s</span> \n", palavrasTexto[26].palavra);
+        fprintf(arqHTML, "<span class=\"text3\">%s</span> \n", palavrasTexto[10].palavra);
+        fprintf(arqHTML, "<span class=\"text1\">%s</span> \n", palavrasTexto[27].palavra);
+        fprintf(arqHTML, "<span class=\"text1\">%s</span> \n", palavrasTexto[28].palavra);
+        fprintf(arqHTML, "<span class=\"text2\">%s</span> \n", palavrasTexto[14].palavra);
+        fprintf(arqHTML, "<span class=\"text2\">%s</span> \n", palavrasTexto[10].palavra);
+        fprintf(arqHTML, "<span class=\"text1\">%s</span> \n", palavrasTexto[29].palavra);
+        fprintf(arqHTML, "<span class=\"text4\">%s</span> \n", palavrasTexto[4].palavra);
+        fprintf(arqHTML, "<span class=\"text1\">%s</span> \n", palavrasTexto[30].palavra);
+        fprintf(arqHTML, "<span class=\"text1\">%s</span> \n", palavrasTexto[31].palavra);
+        fprintf(arqHTML, "<span class=\"text5\">%s</span> \n", palavrasTexto[1].palavra);
+        fprintf(arqHTML, "<span class=\"text1\">%s</span> \n", palavrasTexto[32].palavra);
+        fprintf(arqHTML, "<span class=\"text4\">%s</span> \n", palavrasTexto[5].palavra);
+        fprintf(arqHTML, "<span class=\"text1\">%s</span> \n", palavrasTexto[33].palavra);
+        fprintf(arqHTML, "<span class=\"text5\">%s</span> \n", palavrasTexto[2].palavra);
+        fprintf(arqHTML, "<span class=\"text1\">%s</span> \n", palavrasTexto[34].palavra);
+        fprintf(arqHTML, "<span class=\"text1\">%s</span> \n", palavrasTexto[35].palavra);
+        fprintf(arqHTML, "<span class=\"text4\">%s</span> \n", palavrasTexto[6].palavra);
+        fprintf(arqHTML, "<span class=\"text1\">%s</span> \n", palavrasTexto[36].palavra);
+        fprintf(arqHTML, "<span class=\"text1\">%s</span> \n", palavrasTexto[37].palavra);
+        fprintf(arqHTML, "<span class=\"text1\">%s</span> \n", palavrasTexto[38].palavra);
+        fprintf(arqHTML, "<span class=\"text3\">%s</span> \n", palavrasTexto[7].palavra);
+        fprintf(arqHTML, "<span class=\"text1\">%s</span> \n", palavrasTexto[39].palavra);
+        fprintf(arqHTML, "<span class=\"text1\">%s</span> \n", palavrasTexto[40].palavra);
+        fprintf(arqHTML, "<span class=\"text3\">%s</span> \n", palavrasTexto[8].palavra);
+        fprintf(arqHTML, "<span class=\"text3\">%s</span> \n", palavrasTexto[9].palavra);
+        fprintf(arqHTML, "<span class=\"text2\">%s</span> \n", palavrasTexto[11].palavra);
+        fprintf(arqHTML, "<span class=\"text1\">%s</span> \n", palavrasTexto[21].palavra);
+        fprintf(arqHTML, "<span class=\"text1\">%s</span> \n", palavrasTexto[22].palavra);
+        fprintf(arqHTML, "<span class=\"text4\">%s</span> \n", palavrasTexto[3].palavra);
+        fprintf(arqHTML, "<span class=\"text1\">%s</span> \n", palavrasTexto[20].palavra);
+        fprintf(arqHTML, "<span class=\"text1\">%s</span> \n", palavrasTexto[23].palavra);
+        fprintf(arqHTML, "<span class=\"text1\">%s</span> \n", palavrasTexto[24].palavra);
+        fprintf(arqHTML, "<span class=\"text1\">%s</span> \n", palavrasTexto[25].palavra);
+        fprintf(arqHTML, "<span class=\"text2\">%s</span> \n", palavrasTexto[13].palavra);
+    }
+
+
+
+    fclose(arqHTML);
+}
+
 void ordenaPalavrasUtilizacao(int contador){
     int i, j, aux;
     if (contador == 0)
@@ -299,6 +361,10 @@ main (int argc, char *argv[])
         char **words =  read_from_file(nomeArquivo, &numPalavras);
 
         int contTotal = analisaTexto(words, numPalavras);
+
+        ordenaPalavrasUtilizacao(contTotal);
+        
+        imprimeHtmlComCor(contTotal);
 
         for (i = 0; i < numPalavras; i++)
         free (words[i]);
