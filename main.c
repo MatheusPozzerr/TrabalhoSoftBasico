@@ -183,7 +183,44 @@ void imprimeHtmlSemCor(int contador){
     FILE* arqHTML = fopen ("PalavrasUtilizadasSemCor.html", "w");
     if (contador < 40)
     {
-        /* code */
+        if (contador == 0)
+        {
+            printf("Texto sem palavras");
+        }
+        if (contador == 1)
+        {
+            fprintf(arqHTML, "<html> \n");
+            fprintf(arqHTML, "<title> Palavras e Recorrencias </title> \n");
+            fprintf(arqHTML, "<link rel=\"stylesheet\" type=\"text/css\" href=\"styleNoColor.css\">\n");
+            fprintf(arqHTML, "</head>\n");
+            fprintf(arqHTML, "<body> \n");
+            fprintf(arqHTML, "<div class=\"words\"> \n");
+            fprintf(arqHTML, "<span class=\"text5\">%s</span> \n", palavrasTexto[0].palavra);
+            fprintf(arqHTML, "</div>");
+            fprintf(arqHTML, "</body>");
+            fprintf(arqHTML, "</html>");       
+        }
+        if (contador > 1)
+        {
+            fprintf(arqHTML, "<html> \n");
+            fprintf(arqHTML, "<title> Palavras e Recorrencias </title> \n");
+            fprintf(arqHTML, "<link rel=\"stylesheet\" type=\"text/css\" href=\"styleNoColor.css\">\n");
+            fprintf(arqHTML, "</head>\n");
+            fprintf(arqHTML, "<body> \n");
+            fprintf(arqHTML, "<div class=\"words\"> \n");
+            for (size_t i = 1; i <= contador/2; i++)
+            {
+                fprintf(arqHTML, "<span class=\"text1\">%s</span> \n", palavrasTexto[i].palavra);
+            }
+            fprintf(arqHTML, "<span class=\"text5\">%s</span> \n", palavrasTexto[0].palavra);
+            for (size_t i = contador/2+1; i < contador; i++)
+            {
+                fprintf(arqHTML, "<span class=\"text1\">%s</span> \n", palavrasTexto[i].palavra);
+            }
+            fprintf(arqHTML, "</div>");
+            fprintf(arqHTML, "</body>");
+            fprintf(arqHTML, "</html>"); 
+        }
     }
     else{
         fprintf(arqHTML, "<html> \n");
@@ -245,7 +282,44 @@ void imprimeHtmlComCor(int contador){
     FILE* arqHTML = fopen ("PalavrasUtilizadas.html", "w");
     if (contador < 40)
     {
-        /* code */
+        if (contador == 0)
+        {
+            printf("Texto sem palavras");
+        }
+        if (contador == 1)
+        {
+            fprintf(arqHTML, "<html> \n");
+            fprintf(arqHTML, "<title> Palavras e Recorrencias </title> \n");
+            fprintf(arqHTML, "<link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\">\n");
+            fprintf(arqHTML, "</head>\n");
+            fprintf(arqHTML, "<body> \n");
+            fprintf(arqHTML, "<div class=\"words\"> \n");
+            fprintf(arqHTML, "<span class=\"text5\">%s</span> \n", palavrasTexto[0].palavra);
+            fprintf(arqHTML, "</div>");
+            fprintf(arqHTML, "</body>");
+            fprintf(arqHTML, "</html>");       
+        }
+        if (contador > 1)
+        {
+            fprintf(arqHTML, "<html> \n");
+            fprintf(arqHTML, "<title> Palavras e Recorrencias </title> \n");
+            fprintf(arqHTML, "<link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\">\n");
+            fprintf(arqHTML, "</head>\n");
+            fprintf(arqHTML, "<body> \n");
+            fprintf(arqHTML, "<div class=\"words\"> \n");
+            for (size_t i = 1; i <= contador/2; i++)
+            {
+                fprintf(arqHTML, "<span class=\"text1\">%s</span> \n", palavrasTexto[i].palavra);
+            }
+            fprintf(arqHTML, "<span class=\"text5\">%s</span> \n", palavrasTexto[0].palavra);
+            for (size_t i = contador/2+1; i < contador; i++)
+            {
+                fprintf(arqHTML, "<span class=\"text1\">%s</span> \n", palavrasTexto[i].palavra);
+            }
+            fprintf(arqHTML, "</div>");
+            fprintf(arqHTML, "</body>");
+            fprintf(arqHTML, "</html>"); 
+        }
     }
     else{
         fprintf(arqHTML, "<html> \n");
@@ -296,6 +370,9 @@ void imprimeHtmlComCor(int contador){
         fprintf(arqHTML, "<span class=\"text1\">%s</span> \n", palavrasTexto[24].palavra);
         fprintf(arqHTML, "<span class=\"text1\">%s</span> \n", palavrasTexto[25].palavra);
         fprintf(arqHTML, "<span class=\"text2\">%s</span> \n", palavrasTexto[13].palavra);
+        fprintf(arqHTML, "</div>");
+        fprintf(arqHTML, "</body>");
+        fprintf(arqHTML, "</html>");
     }
 
 
@@ -440,7 +517,7 @@ main (int argc, char *argv[])
         free (words[i]);
         free (words);
 
-        printf("\n\n");
+        printf("\n");
     }
         if (isHtmlColor == true)
     {   
