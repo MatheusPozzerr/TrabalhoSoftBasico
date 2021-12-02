@@ -116,7 +116,7 @@ struct palavrasTotais
     char palavra[30];
     int qtd;
 
-} palavrasTexto[10000];
+} palavrasTexto[10001];
 
 bool adicionaVerificaPalavra(char* palavraVerificada, int contador){
     if (contador > 10000)
@@ -176,6 +176,23 @@ void imprimeCsv (int contador)
         fprintf(arqCsv, "%s, %i\n", palavrasTexto[i].palavra, palavrasTexto[i].qtd);
     }
     fclose(arqCsv);
+}
+
+void ordenaPalavrasUtilizacao(int contador){
+    int i, j, aux;
+    if (contador == 0)
+    {
+        return;
+    }
+    for( i=0; i<contador; i++ ){
+        for( j=i; j<contador; j++ ){
+            if( palavrasTexto[i].qtd < palavrasTexto[j].qtd ){
+                 palavrasTexto[10001] = palavrasTexto[i];
+                 palavrasTexto[i] = palavrasTexto[j];
+                 palavrasTexto[j] = palavrasTexto[10001];
+            }
+        }
+     }
 }
 
 
@@ -267,6 +284,7 @@ main (int argc, char *argv[])
 
         int contTotal= analisaTexto(words, numPalavras);
         
+        ordenaPalavrasUtilizacao(contTotal);
         imprimeCsv(contTotal);
 
         for (i = 0; i < numPalavras; i++)
