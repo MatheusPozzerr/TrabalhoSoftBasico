@@ -111,20 +111,71 @@ char** read_from_file (char* nomeArquivo, int *index)
     return palavras;
 }
 
-void analisaTexto (char** palavras, int numFrases)
+struct palavrasTotais
+{
+    char palavra[30];
+    int qtd;
+
+} palavrasTexto[10000];
+
+bool adicionaVerificaPalavra(char* palavraVerificada, int contador){
+    if (contador > 10000)
+    {
+        printf("\n Caracteres demais a serem processados, o máximo é 10000 \n");
+        exit(EXIT_FAILURE);
+    }
+    
+    if (contador == 0)
+    {
+        strcpy(palavrasTexto[0].palavra, palavraVerificada);
+        palavrasTexto[0].qtd = 1;
+    }
+    else{
+        for (size_t i = 0; i < contador; i++)
+        {
+            if (strcmp(palavrasTexto[i].palavra , palavraVerificada) == 0 )
+            {
+            palavrasTexto[i].qtd = palavrasTexto[i].qtd + 1;
+            return true;
+            }
+        }
+        strcpy(palavrasTexto[contador++].palavra, palavraVerificada);
+        palavrasTexto[contador++].qtd = 1;
+        return false;
+    }
+}
+
+int analisaTexto (char** palavras, int numFrases)
 {
     int j = 0;
+    int contador = 0;
     char * pch;
-    // vector< pair<string, int> > list;
-
         for (j = 0; j < numFrases; j++){
             pch = strtok (palavras[j]," ,.-");
             while (pch != NULL)
             {
-            printf ("%s\n",pch);
-            pch = strtok (NULL, " ,.-");
+                bool verifica = adicionaVerificaPalavra(pch, contador);
+                if (verifica == false)
+                {
+                    contador ++;
+                }
+                pch = strtok (NULL, " ,.-");
             }
-        }
+    }
+
+    return contador;
+}
+
+void imprimeCsv (int contador)
+{
+    FILE* arqCsv = fopen ("PalavrasUtilizadas.csv", "w");
+
+    fputs("Palavra, Recorrência \r\n", arqCsv);
+    for (size_t i = 0; i < contador; i++)
+    {
+        fprintf(arqCsv, "%s, %i\n", palavrasTexto[i].palavra, palavrasTexto[i].qtd);
+    }
+    fclose(arqCsv);
 }
 
 
@@ -214,20 +265,22 @@ main (int argc, char *argv[])
         nomeArquivo = argv[2];
         char **words =  read_from_file(nomeArquivo, &numPalavras);
 
-        analisaTexto(words, numPalavras);
+        int contTotal= analisaTexto(words, numPalavras);
+        
+        imprimeCsv(contTotal);
 
         for (i = 0; i < numPalavras; i++)
         free (words[i]);
         free (words);
 
-        printf("\n\n");
+        printf("Tag Cloud por CSV concluído com sucesso! \n");
     }
     if (isHtml == true)
     {   
         nomeArquivo = argv[2];
         char **words =  read_from_file(nomeArquivo, &numPalavras);
 
-        analisaTexto(words, numPalavras);
+        int contTotal = analisaTexto(words, numPalavras);
 
         for (i = 0; i < numPalavras; i++)
         free (words[i]);
