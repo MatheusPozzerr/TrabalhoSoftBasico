@@ -444,7 +444,6 @@ main (int argc, char *argv[])
     }
         if (isHtmlColor == true)
     {   
-        printf("Entrei aquii");
         nomeArquivo = argv[3];
         char **words =  read_from_file(nomeArquivo, &numPalavras);
 
