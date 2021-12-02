@@ -42,19 +42,20 @@ usage (int status)
   else
     {
       printf ("\
-Uso: tagCloud [OPTION]... [FILE]...\n\
-Ou:  tagCloud [OPTION]... --files0-from=F\n\
+Uso: [OPTION]... [FILE]...\n\
+Ou:  [OPTION]... --files0-from=F\n\
 ");
       printf ("\
-O programa tem como objetivo emitir as palavras mais utilizadas, podendo ser realizada saídas em formato texto e gráfico\n\
+O programa tem como objetivo emitir as palavras mais utilizadas, podendo ser realizada saídas em formato CSV e HTML\n\
 ");
 
       printf ("\
 \n\
 As opções possíveis estão descritas abaixo:\n\
--c                     Saída com as palavras mais utilizadas em formato csv\n\
--h                     Saída com as palavras mais utilizadas em formato HTML\n\
--h -color              Saída com as palavras mais utilizadas em formato HTML e com Cor\n\
+-c                          Saída com as palavras mais utilizadas em formato CSV\n\
+-h                          Saída com as palavras mais utilizadas em formato HTML\n\
+-h -color                   Saída com as palavras mais utilizadas em formato HTML e com Cor\n\
+-c -r numero(EXEMPLO: 10)   Saída com as palavras mais utilizadas em formato CSV e com alcance de palavras mais utilizadas\n\
 ");
       printf ("--help                 mostra esta ajuda e sai, \n");
       printf ("--version              informa a versão e sai.\n");
@@ -82,7 +83,7 @@ char** read_from_file (char* nomeArquivo, int *index)
     FILE* arq = fopen (nomeArquivo, "r");
 
     if (arq == NULL){
-        fprintf (stderr, "Can't open file\n");
+        fprintf (stderr, "Can't open file\nUtilize --help para verificar os possiveis comandos\n");
         exit(1);
     }
     *index = 0;
@@ -168,6 +169,18 @@ int analisaTexto (char** palavras, int numFrases)
 }
 
 void imprimeCsv (int contador)
+{
+    FILE* arqCsv = fopen ("PalavrasUtilizadas.csv", "w");
+
+    fputs("Palavra, Recorrência \r\n", arqCsv);
+    for (size_t i = 0; i < contador; i++)
+    {
+        fprintf(arqCsv, "%s, %i\n", palavrasTexto[i].palavra, palavrasTexto[i].qtd);
+    }
+    fclose(arqCsv);
+}
+
+void imprimeCsvLimitePalavras (int contador)
 {
     FILE* arqCsv = fopen ("PalavrasUtilizadas.csv", "w");
 
@@ -407,6 +420,7 @@ main (int argc, char *argv[])
   bool isCsv;
   bool isHtml;
   bool isHtmlColor;
+  bool isCsvRange;
   int i = 0;
   int optc;
   int sizeWord;
@@ -416,8 +430,6 @@ main (int argc, char *argv[])
   FILE *arq;
   struct fstatus *fstatus;
 
-  /* Line buffer stdout to ensure lines are written atomically and immediately
-     so that processes running in parallel do not intersperse their output.  */
   setvbuf (stdout, NULL, _IOLBF, 0);
 
   int ret;
@@ -439,33 +451,16 @@ main (int argc, char *argv[])
             }
             if (strcmp(argv[1] , "-h") == 0 && strcmp(argv[2] , "-color") == 0){
             optc = 4;
-            }        
+            }
+            if (strcmp(argv[1] , "-c") == 0 && strcmp(argv[2] , "-r") == 0 && argc >= 4){
+            optc = 5;
+            }            
         }       
   }
     
 
     switch (optc)
     {
-    //   case 'c':
-    //     print_bytes = true;
-    //     break;
-
-    //   case 'm':
-    //     print_chars = true;
-    //     break;
-
-    //   case 'l':
-    //     print_lines = true;
-    //     break;
-
-    //   case 'w':
-    //     print_words = true;
-    //     break;
-
-    //   case 'L':
-    //     print_linelength = true;
-    //     break;
-
       case 0: 
       usage(0);
       break;
@@ -480,7 +475,10 @@ main (int argc, char *argv[])
       break;
 
       case 4: isHtmlColor = true;
-      break; 
+      break;
+
+      case 5: isCsvRange = true;
+      break;  
 
       default:
         usage (1);
@@ -517,7 +515,7 @@ main (int argc, char *argv[])
         free (words[i]);
         free (words);
 
-        printf("\n");
+        printf("Tag Cloud por Html concluído com sucesso!\n");
     }
         if (isHtmlColor == true)
     {   
@@ -534,6 +532,28 @@ main (int argc, char *argv[])
         free (words[i]);
         free (words);
 
-        printf("\n\n");
-    }    
+        printf("Tag Cloud por Html com cor concluído com sucesso!\n");
+    }
+        if (isCsvRange == true)
+    {   
+        nomeArquivo = argv[4];
+        char **words =  read_from_file(nomeArquivo, &numPalavras);
+
+        int contTotal= analisaTexto(words, numPalavras);
+        int range = atoi(argv[3]);
+        ordenaPalavrasUtilizacao(contTotal);
+        if (range < contTotal)
+        {
+            contTotal = range;
+        }
+        printf("%i",contTotal);
+        imprimeCsvLimitePalavras(contTotal);
+
+        for (i = 0; i < numPalavras; i++)
+        free (words[i]);
+        free (words);
+
+        printf("Tag Cloud por CSV com alcance de palavras concluído com sucesso! \n");
+    }
+        
 }
