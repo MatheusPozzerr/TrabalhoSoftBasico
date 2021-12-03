@@ -9,7 +9,7 @@
 #define Num_MAX 500
 #define Caracter_MAX 64
 
-  #define FATAL_ERROR(Message)						\
+#define FATAL_ERROR(Message)						\
   do									\
     {									\
       error (0, 0, (Message));						\
@@ -19,17 +19,20 @@
 
 void * malloc (size_t size);
 
+
+// Métodos de operação
 enum operating_mode
   {
     undefined_mode,
 
-    /* Output characters that are in the given bytes. */
+    //Opção que usa bytes como delimitador.
     byte_mode,
 
-    /* Output the given delimiter-separated fields. */
+    //Opção que usa campos como delimitador.
     field_mode
   };
 
+//Método referente ao menu de ajuda do programa
 void
 usage (int status)
 {
@@ -59,6 +62,7 @@ As opções possíveis estão descritas abaixo:\n\
   exit (status);
 }
 
+//Método que mostra a versão do programa.
 void
 version (int status)
 {
@@ -71,7 +75,7 @@ version (int status)
   exit (status);
 }
 
-
+// Método que lê o arquivo.
 char** read_from_file (char* nomeArquivo, int *index)
 { 
     char **palavras = malloc (Num_MAX * sizeof *palavras);
@@ -116,6 +120,8 @@ struct palavrasTotais
 
 } palavrasTexto[10001];
 
+
+// método para adicionar as palavras
 bool adicionaVerificaPalavra(char* palavraVerificada, int contador){
     if (contador > 10000)
     {
@@ -143,6 +149,7 @@ bool adicionaVerificaPalavra(char* palavraVerificada, int contador){
     }
 }
 
+// Método que analisa a repetição das palavras
 int analisaTexto (char** palavras, int numFrases)
 {
     int j = 0;
@@ -164,6 +171,7 @@ int analisaTexto (char** palavras, int numFrases)
     return contador;
 }
 
+// Método que imprime as palavras em CSV
 void imprimeCsv (int contador)
 {
     FILE* arqCsv = fopen ("PalavrasUtilizadas.csv", "w");
@@ -176,6 +184,7 @@ void imprimeCsv (int contador)
     fclose(arqCsv);
 }
 
+//Método que imprime as palavras mais utilizadas
 void imprimeCsvLimitePalavras (int contador)
 {
     FILE* arqCsv = fopen ("PalavrasUtilizadas.csv", "w");
@@ -188,6 +197,7 @@ void imprimeCsvLimitePalavras (int contador)
     fclose(arqCsv);
 }
 
+//Método que imprime em html sem cor.
 void imprimeHtmlSemCor(int contador){
     FILE* arqHTML = fopen ("PalavrasUtilizadasSemCor.html", "w");
     if (contador < 40)
@@ -287,6 +297,7 @@ void imprimeHtmlSemCor(int contador){
     fclose(arqHTML);
 }
 
+//Método que imprime em html com cor
 void imprimeHtmlComCor(int contador){
     FILE* arqHTML = fopen ("PalavrasUtilizadas.html", "w");
     if (contador < 40)
@@ -389,6 +400,7 @@ void imprimeHtmlComCor(int contador){
     fclose(arqHTML);
 }
 
+// Método que ordena as palavras
 void ordenaPalavrasUtilizacao(int contador){
     int i, j, aux;
     if (contador == 0)
@@ -406,7 +418,7 @@ void ordenaPalavrasUtilizacao(int contador){
      }
 }
 
-
+// Método principal
 int
 main (int argc, char *argv[])
 {
