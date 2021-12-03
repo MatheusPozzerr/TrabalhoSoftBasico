@@ -1,9 +1,5 @@
 #include <stdio.h>
 #include <assert.h>
-#include <getopt.h>
-#include <sys/types.h>
-#include <wchar.h>
-#include <wctype.h>
 #include <stdlib.h>
 #include <string.h>
 #include "error.h"
@@ -546,7 +542,6 @@ main (int argc, char *argv[])
         {
             contTotal = range;
         }
-        printf("%i",contTotal);
         imprimeCsvLimitePalavras(contTotal);
 
         for (i = 0; i < numPalavras; i++)
