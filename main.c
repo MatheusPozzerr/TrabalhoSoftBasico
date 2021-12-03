@@ -188,6 +188,8 @@ void imprimeCsvLimitePalavras (int contador)
     fclose(arqCsv);
 }
 
+// testando
+
 void imprimeHtmlSemCor(int contador){
     FILE* arqHTML = fopen ("PalavrasUtilizadasSemCor.html", "w");
     if (contador < 40)
